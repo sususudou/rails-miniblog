@@ -1,0 +1,37 @@
+<%= form_tag('/new') do %>
+<%= text_field_tag :body %>
+<%= submit_tag '送信' %>
+<% end %>
+<ul>
+  <% @posts.each do |post| %>
+  <li>
+    <div>
+      <%= post.body %>
+    </div>
+    <div>
+      <%= link_to "いいね", post, method: :post ,:action => 'like' %>:<%= post.like %>
+    </div>
+    <div>
+      コメント一覧
+      <ul>
+        <%
+          replys = Reply.where(blog_id: post.id)
+          replys.each do |reply|
+        %>
+        <li>
+          <%= reply.comment %>
+        </li>
+        <% end %>
+      </ul>
+    </div>
+    <div>
+      コメントする
+      <%= form_tag('/reply') do %>
+      <%= text_field_tag :body %>
+      <%= hidden_field_tag :blog_id, post.id  %>
+      <%= submit_tag '送信' %>
+      <% end %>
+    </div>
+  </li>
+  <% end %>
+</ul>
